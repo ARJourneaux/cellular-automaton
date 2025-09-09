@@ -1,5 +1,7 @@
 extends TextureRect
 
+# code modified from https://github.com/OverloadedOrama/Godot-ComputeShader-GameOfLife/blob/main/GameOfLife.gd
+
 var rd : RenderingDevice
 var shader_file := RDShaderSource.new()
 var shader : RID
@@ -26,6 +28,10 @@ func _ready() -> void:
 	
 	 #Create shader and pipeline
 	var shader_text = FileAccess.open("user://Shaders/shader1.txt", FileAccess.READ)
+	# if there are no shaders create one
+	if (shader_text == null):
+		ShaderCreator.create([Vector2i(0, -1),Vector2i(-1, 0),Vector2i(1, 0),Vector2i(0, 1)])
+		shader_text = FileAccess.open("user://Shaders/shader1.txt", FileAccess.READ)
 	shader_file.source_compute = shader_text.get_as_text()
 	var shader_spirv := rd.shader_compile_spirv_from_source(shader_file)
 	shader = rd.shader_create_from_spirv(shader_spirv)

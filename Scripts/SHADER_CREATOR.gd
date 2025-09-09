@@ -41,7 +41,7 @@ func neighbourhood_exists(neighbourhood_num : int) -> bool:
 
 func get_shaders() -> PackedStringArray:
 	var new_shader_dir = DirAccess.open("user://Shaders")
-	# there should be a shader file, neighbourhood and import file for each shader
+	# there should be a shader file and neighbourhood for each shader
 	# TODO improve this
 	var file_number : int = new_shader_dir.get_files().size() / 2
 	
@@ -69,7 +69,7 @@ func get_neighbourhood(neighbourhood_num : int) -> PackedVector2Array:
 	return res
 
 func create(pos_arr : Array[Vector2i]) -> void:
-	# there should be a shader file, neighbourhood and import file for each shader
+	# there should be a shader file and neighbourhood for each shader
 	# TODO improve this
 	var new_file_number : int = (shader_dir.get_files().size() / 2) + 1
 	

@@ -22,18 +22,22 @@ func _ready() -> void:
 	
 	ShaderCreator.connect("created_new_shader", populate_dropdown)
 	
-	populate_dropdown()
+	populate_dropdown(false)
 	
 	shader_drop_down.select(0)
 	
 	save_shader_button.disabled = true
 
-func populate_dropdown() -> void:
+func populate_dropdown(new_shader : bool = true) -> void:
+	save_shader_button.disabled = true
+	
 	shader_drop_down.clear()
 	var shader_arr : PackedStringArray = ShaderCreator.get_shaders()
 	for i in shader_arr.size():
 		shader_drop_down.add_item(shader_arr[i])
 	shader_drop_down.add_item("New")
+	
+	_on_shader_dropdown_item_selected(shader_drop_down.item_count-2 if new_shader else 1)
 
 func _generate_new_texture() -> void:
 	# dont run shader while generating texture
@@ -80,11 +84,15 @@ func _on_sim_speed_drag_ended(value_changed: bool) -> void:
 		Engine.time_scale = speed_inp.value
 
 func _on_shader_dropdown_item_selected(index: int) -> void:
+	shader_drop_down.select(index)
+	
+	# new shader option is selected
 	if (index == shader_drop_down.item_count-1):
 		save_shader_button.disabled = false
 		tile_map.new_neighbourhood()
 	
 	else:
+		save_shader_button.disabled = true
 		run_button.disabled = true
 		if texture_target.running:
 			_change_run_mode()
@@ -102,4 +110,3 @@ func _on_shader_dropdown_item_selected(index: int) -> void:
 			print("Neighbourhood", str(index+1), " does not exist")
 		
 		run_button.disabled = false
-		save_shader_button.disabled = true
