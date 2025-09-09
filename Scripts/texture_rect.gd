@@ -28,10 +28,12 @@ func _ready() -> void:
 	
 	 #Create shader and pipeline
 	var shader_text = FileAccess.open("user://Shaders/shader1.txt", FileAccess.READ)
+	
 	# if there are no shaders create one
 	if (shader_text == null):
 		ShaderCreator.create([Vector2i(0, -1),Vector2i(-1, 0),Vector2i(1, 0),Vector2i(0, 1)])
 		shader_text = FileAccess.open("user://Shaders/shader1.txt", FileAccess.READ)
+		
 	shader_file.source_compute = shader_text.get_as_text()
 	var shader_spirv := rd.shader_compile_spirv_from_source(shader_file)
 	shader = rd.shader_create_from_spirv(shader_spirv)
@@ -54,7 +56,7 @@ func setup() -> void:
 	# Data for compute shaders has to come as an array of bytes
 	# Initialize read data
 	read_data = initial_image.get_data()
-
+	
 	var tex_read_format := RDTextureFormat.new()
 	tex_read_format.width = image_size.x
 	tex_read_format.height = image_size.y
@@ -66,17 +68,17 @@ func setup() -> void:
 	)
 	var tex_view := RDTextureView.new()
 	texture_read = rd.texture_create(tex_read_format, tex_view, [read_data])
-
+	
 	# Create uniform set using the read texture
 	var read_uniform := RDUniform.new()
 	read_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	read_uniform.binding = 0
 	read_uniform.add_id(texture_read)
-
+	
 	# Initialize write data
 	write_data = PackedByteArray()
 	write_data.resize(read_data.size())
-
+	
 	var tex_write_format := RDTextureFormat.new()
 	tex_write_format.width = image_size.x
 	tex_write_format.height = image_size.y
@@ -88,13 +90,13 @@ func setup() -> void:
 		| RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	)
 	texture_write = rd.texture_create(tex_write_format, tex_view, [write_data])
-
+	
 	# Create uniform set using the write texture
 	var write_uniform := RDUniform.new()
 	write_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	write_uniform.binding = 1
 	write_uniform.add_id(texture_write)
-
+	
 	uniform_set = rd.uniform_set_create([read_uniform, write_uniform], shader, 0)
 
 func _process(_delta: float) -> void:

@@ -58,6 +58,10 @@ text = "Submit Size"
 layout_mode = 2
 text = "Run"
 
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = " v Simulation Speed v"
+
 [node name="sim_speed" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
 min_value = 0.01

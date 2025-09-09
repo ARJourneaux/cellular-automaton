@@ -84,6 +84,7 @@ func _on_sim_speed_drag_ended(value_changed: bool) -> void:
 		Engine.time_scale = speed_inp.value
 
 func _on_shader_dropdown_item_selected(index: int) -> void:
+	# this is here for the drop down repopulation to select newly created shader
 	shader_drop_down.select(index)
 	
 	# new shader option is selected
